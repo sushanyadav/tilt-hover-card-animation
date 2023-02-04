@@ -1,14 +1,21 @@
 import * as React from 'react';
 
-// Note: see styles.css
+import './tilt-hover-card.css';
 
-export const TiltHoverCard = ({ tiltEffect = 'normal', children }) => {
+interface TiltHoverCardProps {
+  tiltEffect?: 'normal' | 'reverse';
+}
+
+export const TiltHoverCard = ({
+  tiltEffect = 'normal',
+  children,
+}: React.PropsWithChildren<TiltHoverCardProps>) => {
   const containerRef = React.useRef(null);
 
-  const width = 300;
-  const height = 360;
-
   const handleMouseMove = (event: MouseEvent) => {
+    const height = containerRef.current.clientHeight;
+    const width = containerRef.current.clientWidth;
+
     let X: number;
     let Y: number;
 
@@ -27,7 +34,7 @@ export const TiltHoverCard = ({ tiltEffect = 'normal', children }) => {
   };
 
   const handleMouseEnter = () => {
-    containerRef.current.classList.add('container--active'); // see styles.css
+    containerRef.current.classList.add('container--active'); // see tilt-hover-card.css
   };
 
   const handleMouseLeave = () => {
@@ -49,8 +56,10 @@ export const TiltHoverCard = ({ tiltEffect = 'normal', children }) => {
   }, []);
 
   return (
-    <div className="container" ref={containerRef} style={{ width, height }}>
-      {children}
+    <div className="wrap">
+      <div className="container" ref={containerRef}>
+        {children}
+      </div>
     </div>
   );
 };

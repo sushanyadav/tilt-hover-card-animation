@@ -5,7 +5,7 @@ import { TiltHoverCard } from './TiltHoverCard';
 
 const App = () => {
   return (
-    <div className="wrap">
+    <div style={{ display: 'flex', gap: '36px' }}>
       {/* Normal */}
       <TiltHoverCard>
         <p>01. Normal</p>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './style.css';
 
-const ParallaxTiltEffect = ({ tiltEffect = 'normal', children }) => {
+const TiltHoverCard = ({ tiltEffect = 'normal', children }) => {
   const containerRef = React.useRef(null);
 
   const width = 300;
@@ -58,14 +58,14 @@ const App = () => {
   return (
     <div className="wrap">
       {/* Normal */}
-      <ParallaxTiltEffect>
+      <TiltHoverCard>
         <p>01. Normal</p>
-      </ParallaxTiltEffect>
+      </TiltHoverCard>
 
       {/* Reverse */}
-      <ParallaxTiltEffect tiltEffect="reverse">
+      <TiltHoverCard tiltEffect="reverse">
         <p>02. Reverse</p>
-      </ParallaxTiltEffect>
+      </TiltHoverCard>
     </div>
   );
 };

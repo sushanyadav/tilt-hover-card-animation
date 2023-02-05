@@ -66,12 +66,12 @@ export const TiltHoverCard = ({
     type Direction = 'X' | 'Y';
 
     const getRotateDeg = (direction: Direction) => {
-      const _rotateUnCapped: Record<Direction, number> = {
+      const rotateUnCappedObj: Record<Direction, number> = {
         X: rotateXUncapped,
         Y: rotateYUncapped,
       };
 
-      const rotateUnCapped = _rotateUnCapped[direction];
+      const rotateUnCapped = rotateUnCappedObj[direction];
 
       if (rotateUnCapped < -max) {
         return -max;

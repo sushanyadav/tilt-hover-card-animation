@@ -9,7 +9,7 @@ interface TiltHoverCardProps {
   perspective?: number; // transform perspective, the lower the more extreme the tilt gets (pixels (px))
   scale?: number; // transform scale - 2 = 200%, 1.5 = 150%, etc..
   speed?: number; // speed (transition-duration) of the enter/exit transition (milliseconds (ms))
-  easing?: 'cubic-bezier(.03,.98,.52,.99)'; // easing (transition-timing-function) of the enter/exit transition
+  easing?: string; // easing (transition-timing-function) of the enter/exit transition
   isReverse?: boolean;
 }
 

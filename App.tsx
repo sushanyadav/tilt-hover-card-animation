@@ -12,7 +12,7 @@ const App = () => {
       </TiltHoverCard>
 
       {/* Reverse */}
-      <TiltHoverCard tiltEffect="reverse">
+      <TiltHoverCard isReverse>
         <p>02. Reverse</p>
       </TiltHoverCard>
     </div>

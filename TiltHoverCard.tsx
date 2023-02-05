@@ -1,65 +1,100 @@
+// taken from: https://codepen.io/Coding_Journey/pen/RwGzqgJ
+
 import * as React from 'react';
 
 import './tilt-hover-card.css';
 
 interface TiltHoverCardProps {
-  tiltEffect?: 'normal' | 'reverse';
+  max?: number; // max tilt rotation (degrees (deg))
+  perspective?: number; // transform perspective, the lower the more extreme the tilt gets (pixels (px))
+  scale?: number; // transform scale - 2 = 200%, 1.5 = 150%, etc..
+  speed?: number; // speed (transition-duration) of the enter/exit transition (milliseconds (ms))
+  easing?: 'cubic-bezier(.03,.98,.52,.99)'; // easing (transition-timing-function) of the enter/exit transition
+  isReverse?: boolean;
 }
 
 export const TiltHoverCard = ({
-  tiltEffect = 'normal',
   children,
+  max = 15,
+  perspective = 1600,
+  scale = 1.1,
+  speed = 500,
+  easing = 'cubic-bezier(.03,.98,.52,.99)',
+  isReverse = false,
 }: React.PropsWithChildren<TiltHoverCardProps>) => {
-  const containerRef = React.useRef(null);
+  const cardRef = React.useRef(null);
 
-  const handleMouseMove = (event: MouseEvent) => {
-    const height = containerRef.current.clientHeight;
-    const width = containerRef.current.clientWidth;
+  // set the transition
+  const setTransition = () => {
+    const card = cardRef.current;
 
-    let X: number;
-    let Y: number;
+    clearTimeout(card.transitionTimeoutId);
+    card.style.transition = `transform ${speed}ms ${easing}`;
 
-    const { offsetX, offsetY } = event;
-
-    if (tiltEffect === 'reverse') {
-      X = (offsetX - width / 2) / 3 / 3;
-      Y = -(offsetY - height / 2) / 3 / 3;
-    } else if (tiltEffect === 'normal') {
-      X = -(offsetX - width / 2) / 3 / 3;
-      Y = (offsetY - height / 2) / 3 / 3;
-    }
-
-    containerRef.current.style.setProperty('--rY', X.toFixed(2));
-    containerRef.current.style.setProperty('--rX', Y.toFixed(2));
+    card.transitionTimeoutId = setTimeout(() => {
+      card.style.transition = '';
+    }, speed);
   };
 
+  // handle mouse enter event
   const handleMouseEnter = () => {
-    containerRef.current.classList.add('container--active'); // see tilt-hover-card.css
+    setTransition();
   };
 
+  // handle mouse move event
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { offsetWidth, offsetHeight, offsetLeft, offsetTop, style } =
+      cardRef.current;
+
+    const cardWidth = offsetWidth;
+    const cardHeight = offsetHeight;
+
+    const centerX = offsetLeft + cardWidth / 2;
+    const centerY = offsetTop + cardHeight / 2;
+
+    const mouseX = event.clientX - centerX;
+    const mouseY = event.clientY - centerY;
+
+    const rotateXUncapped = (+1 * max * mouseY) / (cardHeight / 2);
+    const rotateYUncapped = (-1 * max * mouseX) / (cardWidth / 2);
+
+    const rotateX =
+      rotateXUncapped < -max
+        ? -max
+        : rotateXUncapped > max
+        ? max
+        : rotateXUncapped;
+    const rotateY =
+      rotateYUncapped < -max
+        ? -max
+        : rotateYUncapped > max
+        ? max
+        : rotateYUncapped;
+
+    // apply transform styles
+    style.transform = `perspective(${perspective}px) rotateX(${
+      isReverse ? -rotateX : rotateX
+    }deg) rotateY(${isReverse ? -rotateY : rotateY}deg) 
+                        scale3d(${scale}, ${scale}, ${scale})`;
+  };
+
+  // handle mouse leave event
   const handleMouseLeave = () => {
-    containerRef.current.classList.remove('container--active');
-    containerRef.current.style.setProperty('--rY', 0);
-    containerRef.current.style.setProperty('--rX', 0);
+    const card = cardRef.current;
+    // reset transform styles
+    card.style.transform = `perspective(${perspective}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+    setTransition();
   };
-
-  React.useEffect(() => {
-    containerRef.current.addEventListener('mousemove', handleMouseMove);
-    containerRef.current.addEventListener('mouseenter', handleMouseEnter);
-    containerRef.current.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      containerRef.current.removeEventListener('mousemove', handleMouseMove);
-      containerRef.current.removeEventListener('mouseenter', handleMouseEnter);
-      containerRef.current.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, []);
 
   return (
-    <div className="wrap">
-      <div className="container" ref={containerRef}>
-        {children}
-      </div>
+    <div
+      ref={cardRef}
+      className="card"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+    >
+      {children}
     </div>
   );
 };

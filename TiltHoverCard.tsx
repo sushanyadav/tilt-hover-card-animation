@@ -82,11 +82,18 @@ export const TiltHoverCard = ({
     const rotateX = getRotateDeg('X');
     const rotateY = getRotateDeg('Y');
 
+    // get transform styles
+    const getTransformStyles = () => {
+      const perspectiveStyle = `perspective(${perspective}px)`;
+      const rotateXStyle = `rotateX(${isReverse ? -rotateX : rotateX}deg)`;
+      const rotateYStyle = `rotateY(${isReverse ? -rotateY : rotateY}deg)`;
+      const scaleStyle = `scale3d(${scale}, ${scale}, ${scale})`;
+
+      return perspectiveStyle + rotateXStyle + rotateYStyle + scaleStyle;
+    };
+
     // apply transform styles
-    style.transform = `perspective(${perspective}px) rotateX(${
-      isReverse ? -rotateX : rotateX
-    }deg) rotateY(${isReverse ? -rotateY : rotateY}deg) 
-                        scale3d(${scale}, ${scale}, ${scale})`;
+    style.transform = getTransformStyles();
   };
 
   // handle mouse leave event

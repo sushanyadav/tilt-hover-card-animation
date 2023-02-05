@@ -18,7 +18,7 @@ export const TiltHoverCard = ({
   max = 15,
   perspective = 1600,
   scale = 1.1,
-  speed = 500,
+  speed = 1500,
   easing = 'cubic-bezier(.03,.98,.52,.99)',
   isReverse = false,
 }: React.PropsWithChildren<TiltHoverCardProps>) => {
@@ -58,18 +58,29 @@ export const TiltHoverCard = ({
     const rotateXUncapped = (+1 * max * mouseY) / (cardHeight / 2);
     const rotateYUncapped = (-1 * max * mouseX) / (cardWidth / 2);
 
-    const rotateX =
-      rotateXUncapped < -max
-        ? -max
-        : rotateXUncapped > max
-        ? max
-        : rotateXUncapped;
-    const rotateY =
-      rotateYUncapped < -max
-        ? -max
-        : rotateYUncapped > max
-        ? max
-        : rotateYUncapped;
+    type Direction = 'X' | 'Y';
+
+    const getRotateDeg = (direction: Direction) => {
+      const _rotateUnCapped: Record<Direction, number> = {
+        X: rotateXUncapped,
+        Y: rotateYUncapped,
+      };
+
+      const rotateUnCapped = _rotateUnCapped[direction];
+
+      if (rotateUnCapped < -max) {
+        return -max;
+      }
+
+      if (rotateUnCapped > max) {
+        return rotateUnCapped > max;
+      }
+
+      return rotateUnCapped;
+    };
+
+    const rotateX = getRotateDeg('X');
+    const rotateY = getRotateDeg('Y');
 
     // apply transform styles
     style.transform = `perspective(${perspective}px) rotateX(${

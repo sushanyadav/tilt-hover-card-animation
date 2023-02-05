@@ -43,8 +43,13 @@ export const TiltHoverCard = ({
 
   // handle mouse move event
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const { offsetWidth, offsetHeight, offsetLeft, offsetTop, style } =
-      cardRef.current;
+    const {
+      offsetWidth,
+      offsetHeight,
+      offsetLeft,
+      offsetTop,
+      style: cardStyles,
+    } = cardRef.current;
 
     const cardWidth = offsetWidth;
     const cardHeight = offsetHeight;
@@ -93,7 +98,7 @@ export const TiltHoverCard = ({
     };
 
     // apply transform styles
-    style.transform = getTransformStyles();
+    cardStyles.transform = getTransformStyles();
   };
 
   // handle mouse leave event

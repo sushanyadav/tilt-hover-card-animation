@@ -118,6 +118,7 @@ export const TiltHoverCard = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
+      style={{ transformStyle: 'preserve-3d' }}
     >
       {children}
     </div>

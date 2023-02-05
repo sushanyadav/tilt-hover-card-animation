@@ -90,8 +90,10 @@ export const TiltHoverCard = ({
     // get transform styles
     const getTransformStyles = () => {
       const perspectiveStyle = `perspective(${perspective}px)`;
-      const rotateXStyle = `rotateX(${isReverse ? -rotateX : rotateX}deg)`;
-      const rotateYStyle = `rotateY(${isReverse ? -rotateY : rotateY}deg)`;
+      const xDeg = isReverse ? -rotateX : rotateX;
+      const yDeg = isReverse ? -rotateY : rotateY;
+      const rotateXStyle = `rotateX(${xDeg}deg)`;
+      const rotateYStyle = `rotateY(${yDeg}deg)`;
       const scaleStyle = `scale3d(${scale}, ${scale}, ${scale})`;
 
       return perspectiveStyle + rotateXStyle + rotateYStyle + scaleStyle;
